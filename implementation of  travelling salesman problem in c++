@@ -1,0 +1,62 @@
+
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+int n, ans = INT_MAX;
+int cost[10][10];
+bool visited[10];
+
+void tsp(int city, int count, int total)
+{
+    if (count == n)
+    {
+        if (cost[city][0] != 0)
+            ans = min(ans, total + cost[city][0]);
+        return;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        if (!visited[i] && cost[city][i] != 0)
+        {
+            visited[i] = true;
+
+            tsp(i, count + 1,
+                total + cost[city][i]);
+
+            visited[i] = false;
+        }
+    }
+}
+
+int main()
+{
+    cout << "Enter number of cities: ";
+    cin >> n;
+
+    cout << "Enter cost matrix:\n";
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> cost[i][j];
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+        visited[i] = false;
+
+    visited[0] = true;
+
+    tsp(0, 1, 0);
+
+    if (ans == INT_MAX)
+        cout << "No valid tour exists";
+    else
+        cout << "Minimum travelling cost: " << ans;
+
+    return 0;
+}
